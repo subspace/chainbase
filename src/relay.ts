@@ -41,18 +41,19 @@ export class Relay extends EventEmitter {
                     switch (decoded.op) {
                         case 'block':
                             if (
-                                typeof decoded.bits === 'number' &&
-                                typeof decoded.hash === 'string' &&
-                                typeof decoded.height === 'number' &&
-                                typeof decoded.mrklRoot === 'string' &&
-                                typeof decoded.nonce === 'number'
+                                decoded.x &&
+                                typeof decoded.x.bits === 'number' &&
+                                typeof decoded.x.hash === 'string' &&
+                                typeof decoded.x.height === 'number' &&
+                                typeof decoded.x.mrklRoot === 'string' &&
+                                typeof decoded.x.nonce === 'number'
                             ) {
                                 const block: IBitcoinBlock = {
-                                    bits: decoded.bits,
-                                    hash: Buffer.from(decoded.hash, 'hex'),
-                                    height: decoded.height,
-                                    merkleRoot: Buffer.from(decoded.mrklRoot, 'hex'),
-                                    nonce: decoded.nonce,
+                                    bits: decoded.x.bits,
+                                    hash: Buffer.from(decoded.x.hash, 'hex'),
+                                    height: decoded.x.height,
+                                    merkleRoot: Buffer.from(decoded.x.mrklRoot, 'hex'),
+                                    nonce: decoded.x.nonce,
                                 };
                                 console.info('New bitcoin block received', block);
                                 this.emit("block", block);
