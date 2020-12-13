@@ -28,6 +28,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^12.19.8",
-    "array-map-set": "^1.0.3"
+    "@types/websocket": "^1.0.1",
+    "array-map-set": "^1.0.3",
+    "websocket": "^1.0.33"
   }
 }
