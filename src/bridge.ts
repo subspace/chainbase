@@ -55,6 +55,7 @@ const CONTRACT_JSON_INTERFACE = JSON.parse(`[
 // interface IBridgeContractState { }
 
 export class Bridge extends EventEmitter {
+    private lastTxNonce: number = 0;
     private readonly account: Account;
     private readonly contract: Contract;
     private readonly web3: Web3;
@@ -86,16 +87,21 @@ export class Bridge extends EventEmitter {
             stateRoot: block.stateRoot,
         });
 
-        const txCount = await this.web3.eth.getTransactionCount(this.account.address) + 1;
+        const txCount = await this.web3.eth.getTransactionCount(this.account.address);
+        const nonce = Math.max(this.lastTxNonce + 1, txCount);
+        this.lastTxNonce = nonce;
         const gasLimit = await contractSendMethod.estimateGas();
         const gasPrice = await this.web3.eth.getGasPrice();
 
         const txData: TxData = {
             data: contractSendMethod.encodeABI(),
-            gasLimit: this.web3.utils.numberToHex(gasLimit),
-            gasPrice: this.web3.utils.numberToHex(gasPrice),
-            nonce: txCount,
+            gasLimit: gasLimit,
+            gasPrice: Math.round(parseInt(gasPrice, 10)),
+            nonce: nonce,
+            to: CONTRACT_ADDRESS,
         };
+
+        console.debug('Ethereum transaction data', txData);
 
         const transaction = new Transaction(txData, {chain: 'ropsten'});
         transaction.sign(Buffer.from(this.account.privateKey.slice(2), 'hex'));
