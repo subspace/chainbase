@@ -20,7 +20,6 @@ async function run(): Promise<void> {
 
     // connect to Ethereum network over bridge
     const bridger = new Bridge();
-    await bridger.connectToEthereumTestNetwork();
     console.log("Connected to Ethereum network!");
 
     // start the subspace mock blockchain
@@ -29,9 +28,9 @@ async function run(): Promise<void> {
     console.log("Subspace mockchain is running!");
 
     // for each new Subspace block, update Bridge-SC on Ethereum
-    subspace.on("block", (block: ISubspaceBlock) => {
+    subspace.on("block", async (block: ISubspaceBlock) => {
         console.log("Created new subspace block");
-        const tx = bridger.createContractUpdate(block);
+        const tx = await bridger.createContractUpdate(block);
         bridger.submitContractUpdate(tx);
         console.log("Submitted update to bridge smart contract on Ethereum");
     });
