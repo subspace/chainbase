@@ -7,12 +7,12 @@ import { randomBytes } from './utils';
  * A bare-bones demo for Chainbase  
  * Relays live Bitcoin blocks from trusted API to Relay-SC on mock Subspace Chain
  * New Subspace blocks are then sent to Bridge-SC on Ethereum test network
- * BTC -> Relayer -> SSC -> Bridger -> Ethereum
+ * BTC -> Relayer -> SSC -> Bridger -> Ethereum -> Mined (success event)
  * 
  * Requires Bridge-SC deployed to Ethereum test network and bridger account with testnet ETH
  */
 
-function main() {
+function run() {
     return new Promise(async () => {
         runDemo();
     });
@@ -30,7 +30,7 @@ async function runDemo() {
     console.log("Connected to Ethereum network!");
 
     // start the subspace mock blockchain 
-    let subspace = new Subspace(5, relayerAddress, relayContractAddress);
+    let subspace = new Subspace(5000, relayerAddress, relayContractAddress);
     subspace.init();
     console.log("Subspace mockchain is running!");
 
@@ -58,5 +58,7 @@ async function runDemo() {
         console.log("New subspace block registered on Ethereum bridge contract");
     })
 }
+
+run();
 
 

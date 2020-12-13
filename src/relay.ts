@@ -20,16 +20,16 @@ export class Relay extends EventEmitter {
      */
     public async connectToBTCRelay() {
         // connect over WS using public endpoint 
-        let connection;
+        // let connection;
 
-        // subscribe to new block events
+        // // subscribe to new block events
 
-        // register event handler for new blocks
-        connection.on("block", (block: any) => {
+        // // register event handler for new blocks
+        // connection.on("block", (block: any) => {
 
-            // parse the json into IBitcoinBlock
+        //     // parse the json into IBitcoinBlock
 
-            this.emit("block", block);
-        })
+        //     this.emit("block", block);
+        // })
     }
 }

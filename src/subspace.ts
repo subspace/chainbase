@@ -80,9 +80,9 @@ export class Subspace extends EventEmitter {
     /**
      * Starts a block production loop with a random block time
      */
-    public init() {
+    public async init() {
         while (true) {
-            randomWait(this.blockTime);
+            await randomWait(this.blockTime);
             const block = this.createBlock();
             this.chain.push(block);
             this.emit("block", block);
@@ -135,12 +135,18 @@ export class Subspace extends EventEmitter {
     public submitTx(tx: ISubspaceTx) {
 
         let senderAccount = this.accounts.get(tx.sender);
-        senderAccount.balance -= tx.amount;
-
-        let receiverAccount = this.accounts.get(tx.receiver);
-        receiverAccount.balance += tx.amount;
-        receiverAccount.state = tx.data;
-
+        if (senderAccount) {
+            senderAccount.balance -= tx.amount;
+            let receiverAccount = this.accounts.get(tx.receiver);
+            if (receiverAccount) {
+                receiverAccount.balance += tx.amount;
+                receiverAccount.state = tx.data;
+            } else {
+                throw new Error("Cannot find receiver account");
+            }
+        } else {
+            throw new Error("Cannot find sender account");
+        }
         // TODO: pay the tx fee
     };
 
