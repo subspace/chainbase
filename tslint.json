@@ -17,6 +17,7 @@
             "dev"
         ],
         "no-shadowed-variable": false,
-        "prefer-object-spread": false
+        "prefer-object-spread": false,
+        "no-console" : false
     }
 }
